@@ -1,0 +1,4 @@
+version: '3'
+services:
+  pdf_builder:
+    command: yarn dev

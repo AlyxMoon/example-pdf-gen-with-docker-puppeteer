@@ -3,7 +3,7 @@ services:
   pdf_builder:
     build: .
     user: '1000'
-    command: yarn dev
+    command: yarn start
     ports:
       - '3520:3520'
     volumes:
