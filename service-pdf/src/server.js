@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer')
 const app = express()
 
 const port = process.env.NODE_PORT || 3000
-const pdfDir = process.env.PDF_DIR || './pdfs'
+const pdfDir = path.resolve(__dirname, '..', process.env.PDF_DIR || './pdfs')
 
 if (!fs.existsSync(pdfDir)) {
   fs.mkdirSync(pdfDir)
@@ -25,7 +25,8 @@ const errorHandler = (error, req, res, next) => {
 }
 
 app.get('/', catchAsyncErrors(async (req, res) => {
-  const url = req.query.url
+  const { name, url, selector } = req.query
+
   if (!url) {
     return res.status(200).json({ message: 'No URL provided, nothing done' })
   }
@@ -43,16 +44,26 @@ app.get('/', catchAsyncErrors(async (req, res) => {
     waitUntil: 'networkidle2',
   })
 
-  const savePath = path.join(pdfDir, `pdf-${Date.now()}.pdf`)
+  if (selector) {
+    await page.waitForSelector('.pdf-content', { visible: true })
+  }
 
-  await age.pdf({
+  await page.waitForTimeout(2000)
+
+  const filename = name ? `${name}.pdf` : `pdf-${Date.now()}.pdf`
+  const savePath = path.join(pdfDir, filename)
+
+  const buffer = await page.pdf({
     path: savePath,
     format: 'letter',
+    printBackground: true,
   })
 
   await browser.close()
 
-  res.status(200).json({ message: `PDF file generated, saved to ${savePath}` })
+  res.status(200).json({
+    filepath: savePath, 
+  })
 }))
 
 app.use(errorHandler)

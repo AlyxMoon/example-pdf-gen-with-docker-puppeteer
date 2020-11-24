@@ -1,0 +1,17 @@
+{
+  "name": "example-pdf-gen-server",
+  "version": "1.0.0",
+  "description": "The backend server code for the example project",
+  "main": "src/server.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

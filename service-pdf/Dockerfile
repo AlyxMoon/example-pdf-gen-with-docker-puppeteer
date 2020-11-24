@@ -18,7 +18,6 @@ COPY . /app/
 WORKDIR app
 
 RUN yarn
-RUN yarn add puppeteer
 
 RUN addgroup -S pptruser \
     && adduser -S -g pptruser pptruser \

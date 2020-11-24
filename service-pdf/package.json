@@ -1,0 +1,18 @@
+{
+  "name": "example-pdf-gen-service",
+  "version": "1.0.0",
+  "description": "The PDF generator service for the example project",
+  "main": "src/server.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer": "^5.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

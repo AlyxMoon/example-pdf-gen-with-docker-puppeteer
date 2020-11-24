@@ -1,0 +1,19 @@
+version: '3'
+services:
+  pdf_builder:
+    build: .
+    user: '1000'
+    command: yarn start
+    ports:
+      - '3521:3521'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NODE_PORT: 3521
+      PDF_DIR: './pdfs'
+    networks:
+      - pdf-gen-service
+
+networks:
+  pdf-gen-service:

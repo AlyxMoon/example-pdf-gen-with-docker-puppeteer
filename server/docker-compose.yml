@@ -1,0 +1,19 @@
+version: '3'
+services:
+  api_server:
+    build: .
+    command: yarn start
+    ports:
+      - '3520:3520'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NODE_PORT: 3520
+      PDF_BUILDER_ADDRESS: http://pdf_builder:3521
+      CLIENT_ADDRESS: http://client:8080
+    networks:
+      - pdf-gen-service
+
+networks:
+  pdf-gen-service:

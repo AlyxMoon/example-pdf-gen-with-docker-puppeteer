@@ -1,20 +1,48 @@
 version: '3'
 services:
-  pdf_builder:
-    build: .
-    user: '1000'
+  vue_client:
+    build:
+      context: ./client
+    command: yarn serve
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    networks:
+      - pdf-gen-service
+
+  api_server:
+    build:
+      context: ./server
     command: yarn start
     ports:
       - '3520:3520'
     volumes:
-      - .:/app
+      - ./server:/app
       - /app/node_modules
     environment:
       NODE_PORT: 3520
+      PDF_BUILDER_ADDRESS: http://pdf_builder:3521
+      CLIENT_ADDRESS: http://vue_client:8080
+    networks:
+      - pdf-gen-service
+
+  pdf_builder:
+    build:
+      context: ./service-pdf
+    user: '1000'
+    command: yarn start
+    ports:
+      - '3521:3521'
+    volumes:
+      - ./service-pdf:/app
+      - /app/node_modules
+    environment:
+      NODE_PORT: 3521
       PDF_DIR: './pdfs'
-    network_mode: 'host'
+    networks:
+      - pdf-gen-service
 
 networks:
-  default:
-    external:
-      name: localdev
+  pdf-gen-service:
